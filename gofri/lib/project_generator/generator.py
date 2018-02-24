@@ -20,7 +20,18 @@ def build_xml(root_package, name):
     """.format(name, root_package)
     return xml
 
+start_file = """
+import os
+from gofri.lib.main import main
 
+if __name__ == '__main__':
+    ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+    main(ROOT_PATH)
+"""
+
+def generate_start_file(root_package, name):
+    with open("{}/{}".format(root_package, "start.py"), "w") as xml_file:
+        xml_file.write(start_file)
 
 def generate_xml(root_package, name):
     with open("{}/{}".format(root_package, "conf.xml"), "w") as xml_file:
@@ -50,7 +61,10 @@ def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_
 
     os.makedirs(root_package, exist_ok=True)
     open("{}/{}".format(root_package, "__init__.py"), "w")
+
     generate_xml(root_package, name)
+    generate_start_file(root_package, name)
+
     if web:
         generate_web_dir(root_package)
     if back:
