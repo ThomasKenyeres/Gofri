@@ -27,6 +27,9 @@ def init_config():
     MYSQL_CONFIG = C.get_dict_config(CONF, "database", "mysql-config")
     DEPENDENCIES = C.get_dict_config(CONF, "dependencies", "dependency")
 
+    if isinstance(DEPENDENCIES, str):
+        DEPENDENCIES = [DEPENDENCIES]
+
 class ASD:
     pass
 
