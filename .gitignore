@@ -2,4 +2,4 @@
 build/*
 
 setup.py
-
+*test.py*
