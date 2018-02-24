@@ -2,5 +2,5 @@
 build/*
 *__pycache__*
 
-setup.py
+#setup.py
 *test.py*
