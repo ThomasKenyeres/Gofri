@@ -39,7 +39,7 @@ def run():
     global HOST
     if HOST == None:
         HOST = "127.0.0.1"
-    APP.run(port=PORT, host=HOST)
+    APP.run(port=int(PORT), host=HOST)
 
 
 def main(root_path):
