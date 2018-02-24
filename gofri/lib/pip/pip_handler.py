@@ -14,10 +14,11 @@ class PIPHandler():
 
     def get_uninstalled_packages(self):
         result = []
-        for pname in self.package_names:
-            spec = importlib.util.find_spec(pname)
-            if spec is None:
-                result.append(pname)
+        if self.package_names is not None:
+            for pname in self.package_names:
+                spec = importlib.util.find_spec(pname)
+                if spec is None:
+                    result.append(pname)
         return result
 
 
