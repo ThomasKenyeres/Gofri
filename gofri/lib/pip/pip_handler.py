@@ -27,8 +27,3 @@ class PIPHandler():
                 print("Installing missing dependency: \"{}\" ...".format(package_name))
                 print("> FLASK: ", end="")
                 os.system("sudo -S pip install " + package_name)
-
-if __name__ == '__main__':
-    h = PIPHandler()
-    h.package_names = ["pygame", "matplotlib", ""]
-    h.install()
