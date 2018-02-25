@@ -20,8 +20,7 @@ def build_xml(root_package, name):
 
 
 def build_start_file_content(root_package_name):
-    start_file_content = """
-    import os
+    start_file_content = """import os
 
     from gofri.lib.main import main
     from {} import modules
@@ -32,8 +31,7 @@ def build_start_file_content(root_package_name):
     """.format(root_package_name)
     return start_file_content
 
-generator_file_content = """
-import os
+generator_file_content = """import os
 
 import sys
 from gofri.lib.project_generator.cli import execute_command
