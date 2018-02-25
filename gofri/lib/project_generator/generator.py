@@ -3,9 +3,19 @@ import os
 from gofri.lib.project_generator.templates import *
 
 
+def get_project_name(name):
+    root_package = ""
+    for char in str(name):
+        if char.isalnum():
+            root_package += char
+        else:
+            root_package += "_"
+    return root_package.lower()
+
+
 def generate_start_file(root_package, name):
-    with open("{}/{}".format(root_package, "start.py"), "w") as xml_file:
-        xml_file.write(start_file_content)
+    with open("{}/{}".format(root_package, "start.py"), "w") as start_file:
+        start_file.write(generate_start_file(get_project_name(name)))
 
 def generate_modules_file(root_package, name):
     with open("{}/{}".format(root_package, "modules.py"), "w") as xml_file:
@@ -27,16 +37,6 @@ def generate_web_dir(root_package):
 def generate_back_dir(root_package):
     os.makedirs("{}/{}/{}".format(root_package, "back", "controller"), exist_ok=True)
     open("{}/{}/{}".format(root_package, "back", "__init__.py"), "w")
-
-def get_project_name(name):
-    root_package = ""
-    for char in str(name):
-        if char.isalnum():
-            root_package += char
-        else:
-            root_package += "_"
-    return root_package.lower()
-
 
 def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_xml=False):
     root_package_name = get_project_name(name)

@@ -19,16 +19,18 @@ def build_xml(root_package, name):
     return xml
 
 
-start_file_content = """
-import os
+def build_start_file_content(root_package_name):
+    start_file_content = """
+    import os
 
-from gofri.lib.main import main
-from app import modules
-
-if __name__ == '__main__':
-    ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
-    main(ROOT_PATH, modules)
-"""
+    from gofri.lib.main import main
+    from {} import modules
+    
+    if __name__ == '__main__':
+        ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+        main(ROOT_PATH, modules)
+    """.format(root_package_name)
+    return start_file_content
 
 generator_file_content = """
 import os
