@@ -15,7 +15,7 @@ def get_project_name(name):
 
 def generate_start_file(root_package, name):
     with open("{}/{}".format(root_package, "start.py"), "w") as start_file:
-        start_file.write(generate_start_file(get_project_name(name)))
+        start_file.write(build_start_file_content(get_project_name(name)))
 
 def generate_modules_file(root_package, name):
     with open("{}/{}".format(root_package, "modules.py"), "w") as xml_file:
