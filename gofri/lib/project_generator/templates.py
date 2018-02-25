@@ -21,7 +21,11 @@ def build_xml(root_package, name):
 
 def build_start_file_content(root_package_name):
     start_file_content = """import os
+import sys
 from gofri.lib.main import main
+
+sys.path.append(sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
 from {} import modules
     
 if __name__ == '__main__':
