@@ -45,7 +45,7 @@ def run():
     APP.run(port=int(PORT), host=HOST)
 
 
-def main(root_path):
+def main(root_path, modules):
     global C, ROOT_PATH
     C = ConfigReader(root_path)
     ROOT_PATH = root_path
@@ -53,7 +53,7 @@ def main(root_path):
     init_config()
     piphandler = PIPHandler()
     piphandler.package_names = DEPENDENCIES
-    #print("Dependencies are loaded")
+
     piphandler.install()
     print("All required dependencies are installed")
 
