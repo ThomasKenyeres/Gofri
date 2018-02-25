@@ -5,6 +5,7 @@ def create_import_statement(project_path, name):
     return "from app.{} import {}".format(package, name)
 
 def generate_module(root_package_path, inner_path, name, template=""):
+    #TODO: __init__.py generation in each directory from root package!!!
     fullpath = "{}/{}".format(root_package_path, inner_path)
     file_path = "{}/{}.py".format(fullpath, name)
 
