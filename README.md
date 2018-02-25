@@ -25,6 +25,8 @@ My-First-Project
         __init__.py
         start.py
         conf.xml
+        modules.py
+        generate.py
         back
             __init__.py
             controller
@@ -36,4 +38,22 @@ My-First-Project
             ...
         web
             <web content if needed>
+```
+
+You can add new modules easily:
+```
+<Project>/<root_package>/generate.py generate module <name> <path>
+```
+
+```
+MyFirstProject/my_first_project/generate.py generate module my_module back/dao
+```
+
+Or add a controller more easily:
+```
+<Project>/<root_package>/generate.py generate controller <name>
+```
+
+```
+MyFirstProject/my_first_project/generate.py generate controller my_controller
 ```
