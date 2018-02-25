@@ -5,7 +5,16 @@ from gofri.lib.project_generator.templates import *
 
 def generate_start_file(root_package, name):
     with open("{}/{}".format(root_package, "start.py"), "w") as xml_file:
-        xml_file.write(start_file)
+        xml_file.write(start_file_content)
+
+def generate_modules_file(root_package, name):
+    with open("{}/{}".format(root_package, "modules.py"), "w") as xml_file:
+        pass
+
+def generate_generate_file(root_package, name):
+    with open("{}/{}".format(root_package, "generate.py"), "w") as gen_file:
+        gen_file.write(generator_file_content)
+
 
 def generate_xml(root_package, name):
     with open("{}/{}".format(root_package, "conf.xml"), "w") as xml_file:
