@@ -48,6 +48,7 @@ def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_
     generate_xml(root_package, name)
     generate_start_file(root_package, name)
     generate_modules_file(root_package, name)
+    generate_generate_file(root_package, name)
 
     if web:
         generate_web_dir(root_package)

@@ -35,7 +35,6 @@ if __name__ == '__main__':
     return start_file_content
 
 generator_file_content = """import os
-
 import sys
 from gofri.lib.project_generator.cli import execute_command
 
