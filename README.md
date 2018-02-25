@@ -9,13 +9,24 @@ To use the framework you can install an early version with running
 ```setup.py install``` in the 'Gofri' directory.
 
 
-CLI tool not developed yet, you can generate new project with: 
+CLI tool is not developed yet, so you can copy this code into a python file: 
 ```python
-gofri.lib.project_generator.generate_project(<path>, <name>)
+import os
+import sys
+import gofri.lib.project_generator.generator as G
 
+G.generate_project(
+    os.path.dirname(os.path.realpath(__file__)),
+    sys.argv[1]
+)
 ```
 
-and start the newly created app by running ```start.py``` in its generated root package with ```python3```.
+and run in like ```python3 <python_file> <MyProjectName>``` and it will create a project in the current directory.
+
+
+To start the newly created app run ```start.py``` in its generated root package with ```python3```.
+
+
 
 
 Project structure:
