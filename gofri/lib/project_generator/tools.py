@@ -22,12 +22,9 @@ def init_python_package(path):
 def make_python_packages(path_to_root_package, packages):
     if is_python_package(path_to_root_package):
         package_names = packages.split(".")
-        print("{}  --  {}".format(package_names[0], os.path.basename(path_to_root_package)))
         if package_names[0] == os.path.basename(path_to_root_package):
-            print("==")
             cur_path = ""
             for name in package_names[1::]:
-                print(name)
                 cur_path += "/{}".format(name)
                 fullpath = "{}{}".format(path_to_root_package, cur_path)
                 if os.path.exists(fullpath):
