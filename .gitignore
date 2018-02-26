@@ -5,3 +5,5 @@ build/*
 #setup.py
 *test.py*
 refresh.sh
+
+wiki_notes/*
