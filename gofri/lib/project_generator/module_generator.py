@@ -1,8 +1,14 @@
 import os
 
-def create_import_statement(project_path, name):
+from pathlib import Path
+
+
+def create_import_statement(root_package_path, project_path, name):
     package = str(project_path).replace("/", ".")
-    return "from app.{} import {}".format(package, name)
+    parent = os.path.basename(os.path.normpath(root_package_path))
+    import_statement = "from {}.{} import {}".format(parent, package, name)
+    return import_statement
+
 
 def generate_module(root_package_path, inner_path, name, template=""):
     #TODO: __init__.py generation in each directory from root package!!!
@@ -22,7 +28,7 @@ def generate_module(root_package_path, inner_path, name, template=""):
 
     with open(modules_py_path, "w+") as modules_py:
         print(old)
-        new = old + "\n{}".format(create_import_statement(inner_path, name))
+        new = old + "\n{}".format(create_import_statement(root_package_path, inner_path, name))
         modules_py.write(new)
 
 
@@ -32,8 +38,3 @@ if __name__ == '__main__':
         inner_path="back/controller",
         name="van_controller"
     )
-    """generate_module(
-        "/home/thomas/MyThings/PROG/PYTHON/MyProjects/try/serpent/SerpentExample1/app/",
-        "back/service",
-        "person_service"
-    )"""
