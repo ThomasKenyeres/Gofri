@@ -1,20 +1,7 @@
 import os
 
 from gofri.lib.project_generator.templates import *
-
-
-def get_project_name(name):
-    root_package = ""
-    for char in str(name):
-        if char.isalnum():
-            root_package += char
-        else:
-            root_package += "_"
-    return root_package.lower()
-
-def make_python_packages(path):
-    os.makedirs(path, exist_ok=True)
-    open("{}/__init__.py".format(path), "w")
+from gofri.lib.project_generator.tools import get_project_name, make_python_packages, init_python_package
 
 
 def generate_start_file(root_package, name):
@@ -35,17 +22,16 @@ def generate_xml(root_package, name):
         xml_file.write(build_xml(root_package, name))
 
 def generate_web_dir(root_package):
-    make_python_packages("{}/{}".format(root_package, "web"))
+    make_python_packages(root_package, "{}.web".format(os.path.basename(root_package)))
 
 def generate_back_dir(root_package):
-    make_python_packages("{}/{}".format(root_package, "back"))
-    make_python_packages("{}/{}/{}".format(root_package, "back", "controller"))
+    make_python_packages(root_package, "{}.back.controller".format(os.path.basename(root_package)))
 
 def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_xml=False):
     root_package_name = get_project_name(name)
     root_package = "{}/{}/{}".format(path, name, root_package_name)
 
-    make_python_packages(root_package)
+    init_python_package(root_package)
 
     generate_xml(root_package, name)
     generate_start_file(root_package, name)
