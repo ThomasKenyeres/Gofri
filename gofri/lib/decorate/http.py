@@ -1,15 +1,22 @@
+from flask import request
 from flask_restful import Resource
+
+from gofri.lib.decorate.tools import generate_arg_tuple
 from gofri.lib.main import API
 
 
-class GET():
-    def __init__(self, path=""):
+class GET:
+    resource_count = 0
+
+    def __init__(self, path):
         self.path = path
 
     def __call__(self, function):
-        resource = type("{}_Resource".format(function.__name__), (Resource,), {})
-        def get(s, *args):
-            return function()
-        resource.get = get
-        API.add_resource(resource, self.path)
-        print(API.resources)
+        GET.resource_count += 1
+        resource_class = type("Resource{}".format(GET.resource_count), (Resource,), {})
+        def get(s, *args, **kwargs):
+            path_arg_tuple = tuple(kwargs[arg] for arg in kwargs)
+            return function(*generate_arg_tuple(function, path_arg_tuple, request.args))
+        resource_class.get = get
+
+        API.add_resource(resource_class, self.path)
