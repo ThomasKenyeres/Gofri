@@ -8,20 +8,7 @@ Based on Flask and SqlAlchemy.
 To use the framework you can install an early version with running
 ```setup.py install``` in the 'Gofri' directory.
 
-
-CLI tool is not developed yet, so you can copy this code into a python file: 
-```python
-import os
-import sys
-import gofri.lib.project_generator.generator as G
-
-G.generate_project(
-    os.path.dirname(os.path.realpath(__file__)),
-    sys.argv[1]
-)
-```
-
-and run in like ```python3 <python_file> <MyProjectName>``` and it will create a project in the current directory.
+To create a project run ```python3 -m gofri.generate_project <ProjectName>```.
 
 
 To start the newly created app run ```start.py``` in its generated root package with ```python3```.
