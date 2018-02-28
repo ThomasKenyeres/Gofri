@@ -1,6 +1,31 @@
 import os
 
-from pathlib import Path
+
+def is_python_package(path):
+    files = os.listdir(path)
+    return "__init__.py" in files
+
+def make_python_packages3(path_to_root_package, packages):
+    if is_python_package(path_to_root_package):
+        package_names = packages.split(".")
+        if path_to_root_package[-1] == "/":
+            path_to_root_package = path_to_root_package[0:-1:]
+        if package_names[0] == os.path.basename(path_to_root_package):
+            print("OKKKK")
+            cur_path = ""
+            fullpath = ""
+            for name in package_names[1::]:
+                cur_path += "/{}".format(name)
+                fullpath = "{}{}".format(path_to_root_package, cur_path)
+                if os.path.exists(fullpath):
+                    if not is_python_package(fullpath):
+                        open("{}/__init__.py".format(fullpath), "w")
+                else:
+                    os.mkdir(fullpath)
+                    open("{}/__init__.py".format(fullpath), "w")
+            return fullpath
+    else:
+        raise ValueError("Given root path is not a python package")
 
 
 def create_import_statement(root_package_path, project_path, name):
@@ -10,31 +35,10 @@ def create_import_statement(root_package_path, project_path, name):
     return import_statement
 
 
-def generate_module(root_package_path, inner_path, name, template=""):
-    #TODO: __init__.py generation in each directory from root package!!!
-    fullpath = "{}/{}".format(root_package_path, inner_path)
-    file_path = "{}/{}.py".format(fullpath, name)
-
-    os.makedirs(fullpath, exist_ok=True)
-
-    with open("{}{}/{}.py".format(root_package_path, inner_path, name), "w+") as module_file:
+def generate_module2(root_package_path, module_package, name, template=""):
+    package_path = make_python_packages3(root_package_path, module_package)
+    with open("{}/{}.py".format(package_path, name), "w") as module_file:
         module_file.write(template)
 
-    modules_py_path = "{}/modules.py".format(root_package_path)
-
-    old = ""
-    with open(modules_py_path, "r") as modules_py:
-        old = modules_py.read()
-
-    with open(modules_py_path, "w+") as modules_py:
-        print(old)
-        new = old + "\n{}".format(create_import_statement(root_package_path, inner_path, name))
-        modules_py.write(new)
-
-
-if __name__ == '__main__':
-    generate_module(
-        root_package_path="/home/thomas/MyThings/PROG/PYTHON/MyProjects/try/serpent/SerpentExample1/app/",
-        inner_path="back/controller",
-        name="van_controller"
-    )
+    with open("{}/modules.py".format(root_package_path), "a") as modules_py:
+        modules_py.write(create_import_statement(root_package_path, module_package, name))
