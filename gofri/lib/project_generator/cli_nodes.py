@@ -1,5 +1,5 @@
 from clinodes.nodes import ArgNode
-from gofri.lib.project_generator.module_generator import generate_module
+from gofri.lib.project_generator.module_generator import generate_module2
 
 data = {}
 
@@ -11,9 +11,9 @@ class ModuleGeneratorNode(ArgNode):
     def run(self, *args_remained):
         name = args_remained[0]
         inner_path = args_remained[1]
-        generate_module(
+        generate_module2(
             root_package_path=data["root"],
-            inner_path=inner_path,
+            module_package=inner_path,
             name=name
         )
 
@@ -24,10 +24,11 @@ class ControllerGeneratorNode(ArgNode):
 
     def run(self, *args_remained):
         name = args_remained[0]
-        inner_path = "back/controller"
-        generate_module(
+        inner_path = "{}.back.controller".format(data["root_base"])
+        print("FUUCK: {}".format(inner_path))
+        generate_module2(
             root_package_path=data["root"],
-            inner_path=inner_path,
+            module_package=inner_path,
             name=name
         )
 
@@ -45,7 +46,3 @@ class RootNode(ArgNode):
             "generate": GenerateNode
         }
         self.expects_more = True
-
-
-if __name__ == '__main__':
-    RootNode()
