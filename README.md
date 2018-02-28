@@ -4,12 +4,17 @@ Python3 web framework with builtin SQL-support, ORM, URL-mappings and easily con
 
 Based on Flask and SqlAlchemy.
 
+###Install
 
 To use the framework you can install an early version with running
 ```setup.py install``` in the 'Gofri' directory.
 
-To create a project run ```python3 -m gofri.generate_project <ProjectName>```.
 
+###Create project
+
+To create a project run ```python3 -m gofri.generate_project <ProjectName>``` and the project will be created in the current directory.
+
+###Start your application
 
 To start the newly created app run ```start.py``` in its generated root package with ```python3```.
 
@@ -37,6 +42,8 @@ My-First-Project
         web
             <web content if needed>
 ```
+
+###Gofri CLI
 
 You can add new modules easily:
 ```
