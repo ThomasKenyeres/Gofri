@@ -53,11 +53,11 @@ My-First-Project
 
 You can add new modules easily:
 ```
-<Project>/<root_package>/generate.py generate module <name> <path>
+<Project>/<root_package>/generate.py generate module <name> <packages>
 ```
 
 ```
-MyFirstProject/my_first_project/generate.py generate module my_module back/dao
+MyFirstProject/my_first_project/generate.py generate module my_module my_first_project.back.dao
 ```
 
 Or add a controller more easily:
