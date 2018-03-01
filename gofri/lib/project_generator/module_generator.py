@@ -41,4 +41,8 @@ def generate_module2(root_package_path, module_package, name, template=""):
         module_file.write(template)
 
     with open("{}/modules.py".format(root_package_path), "a") as modules_py:
-        modules_py.write(create_import_statement(root_package_path, module_package, name))
+        modules_py.write(
+            "\n{}".format(
+                create_import_statement(root_package_path, module_package, name)
+            )
+        )
