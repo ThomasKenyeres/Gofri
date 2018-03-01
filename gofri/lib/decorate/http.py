@@ -1,10 +1,9 @@
-import json
-
 from flask import request
 from flask_restful import Resource
 
 from gofri.lib.decorate.tools import generate_arg_tuple, force_jsonizable
 from gofri.lib.main import API
+
 
 class GET:
     resource_count = 0
