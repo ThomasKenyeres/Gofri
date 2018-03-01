@@ -68,7 +68,3 @@ def main(root_path, modules):
     print("All required dependencies are installed")
 
     run()
-
-
-if __name__ == '__main__':
-    main()
