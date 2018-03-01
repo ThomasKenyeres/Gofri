@@ -1,7 +1,6 @@
 from clinodes.nodes import ArgNode
-from gofri.lib.project_generator.shortcuts import generate_controller
 
-from gofri.lib.project_generator.module_generator import generate_module2
+from gofri.lib.project_generator.module_generator import generate_module
 
 data = {}
 
@@ -13,7 +12,7 @@ class ModuleGeneratorNode(ArgNode):
     def run(self, *args_remained):
         name = args_remained[0]
         inner_path = args_remained[1]
-        generate_module2(
+        generate_module(
             root_package_path=data["root"],
             module_package=inner_path,
             name=name
@@ -27,7 +26,7 @@ class ControllerGeneratorNode(ArgNode):
     def run(self, *args_remained):
         name = args_remained[0]
         inner_path = "{}.back.controller".format(data["root_base"])
-        generate_module2(
+        generate_module(
             root_package_path=data["root"],
             module_package=inner_path,
             name=name
@@ -42,7 +41,7 @@ class ModelGeneratorNode(ArgNode):
     def run(self, *args_remained):
         name = args_remained[0]
         inner_path = "{}.back.model".format(data["root_base"])
-        generate_module2(
+        generate_module(
             root_package_path=data["root"],
             module_package=inner_path,
             name=name
@@ -57,7 +56,7 @@ class ServiceGeneratorNode(ArgNode):
     def run(self, *args_remained):
         name = args_remained[0]
         inner_path = "{}.back.service".format(data["root_base"])
-        generate_module2(
+        generate_module(
             root_package_path=data["root"],
             module_package=inner_path,
             name=name

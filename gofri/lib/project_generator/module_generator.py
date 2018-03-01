@@ -5,7 +5,7 @@ def is_python_package(path):
     files = os.listdir(path)
     return "__init__.py" in files
 
-def make_python_packages3(path_to_root_package, packages):
+def make_python_packages(path_to_root_package, packages):
     if is_python_package(path_to_root_package):
         package_names = packages.split(".")
         if path_to_root_package[-1] == "/":
@@ -35,8 +35,8 @@ def create_import_statement(root_package_path, project_path, name):
     return import_statement
 
 
-def generate_module2(root_package_path, module_package, name, template=""):
-    package_path = make_python_packages3(root_package_path, module_package)
+def generate_module(root_package_path, module_package, name, template=""):
+    package_path = make_python_packages(root_package_path, module_package)
     with open("{}/{}.py".format(package_path, name), "w") as module_file:
         module_file.write(template)
 
