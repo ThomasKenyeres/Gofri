@@ -11,7 +11,6 @@ def make_python_packages(path_to_root_package, packages):
         if path_to_root_package[-1] == "/":
             path_to_root_package = path_to_root_package[0:-1:]
         if package_names[0] == os.path.basename(path_to_root_package):
-            print("OKKKK")
             cur_path = ""
             fullpath = ""
             for name in package_names[1::]:
