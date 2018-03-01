@@ -3,25 +3,8 @@ import json
 from flask import request
 from flask_restful import Resource
 
-from gofri.lib.decorate.tools import generate_arg_tuple
+from gofri.lib.decorate.tools import generate_arg_tuple, force_jsonizable
 from gofri.lib.main import API
-
-def force_jsonizable(obj):
-    if isinstance(obj, (int, float, bytes, bool, str)):
-        return obj
-    elif isinstance(obj, (dict)):
-        for key in obj:
-            obj[key] = force_jsonizable(obj[key])
-        return obj
-    elif isinstance(obj, (list)):
-        for i in range(len(obj)):
-            obj[i] = force_jsonizable(obj[i])
-        return obj
-    else:
-        dict_obj = obj.__dict__
-        for key in dict_obj:
-            dict_obj[key] = force_jsonizable(dict_obj[key])
-        return dict_obj
 
 class GET:
     resource_count = 0
