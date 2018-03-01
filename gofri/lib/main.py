@@ -1,3 +1,7 @@
+import shutil
+
+import pkg_resources
+
 from flask import Flask
 from flask_restful import Api
 
@@ -46,6 +50,12 @@ def run():
 
 
 def main(root_path, modules):
+    banner = "GOFRI -- version: {}\n{}\n".format(
+        pkg_resources.get_distribution("gofri").version,
+        "#"*shutil.get_terminal_size().columns
+    )
+    print(banner)
+
     global C, ROOT_PATH
     C = ConfigReader(root_path)
     ROOT_PATH = root_path
