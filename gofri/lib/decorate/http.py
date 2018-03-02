@@ -32,3 +32,30 @@ class POST(RequestHandler):
 
     def __call__(self, func):
         return _wrap_http(self.path, ["POST"], func)
+
+
+class HEAD(RequestHandler):
+    def __init__(self, path, headers=None, body=None, json=None):
+        super().__init__(headers, body, json)
+        self.path = path
+
+    def __call__(self, func):
+        return _wrap_http(self.path, ["HEAD"], func)
+
+
+class PUT(RequestHandler):
+    def __init__(self, path, headers=None, body=None, json=None):
+        super().__init__(headers, body, json)
+        self.path = path
+
+    def __call__(self, func):
+        return _wrap_http(self.path, ["PUT"], func)
+
+
+class DELETE(RequestHandler):
+    def __init__(self, path, headers=None, body=None, json=None):
+        super().__init__(headers, body, json)
+        self.path = path
+
+    def __call__(self, func):
+        return _wrap_http(self.path, ["DELETE"], func)
