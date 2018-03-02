@@ -30,7 +30,7 @@ def make_python_packages(path_to_root_package, packages):
 def create_import_statement(root_package_path, project_path, name):
     package = str(project_path).replace("/", ".")
     parent = os.path.basename(os.path.normpath(root_package_path))
-    import_statement = "from {}.{} import {}".format(parent, package, name)
+    import_statement = "from {} import {}".format(package, name)
     return import_statement
 
 
