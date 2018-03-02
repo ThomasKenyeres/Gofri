@@ -1,23 +1,34 @@
-from flask import request
-from flask_restful import Resource
-
-from gofri.lib.decorate.tools import generate_arg_tuple, force_jsonizable
-from gofri.lib.main import API
+from gofri.lib.decorate.tools import _wrap_http
+from gofri.lib.http.filter import FILTERS
+from gofri.lib.http.handler import RequestHandler
 
 
-class GET:
-    resource_count = 0
+class GofriFilter:
+    def __init__(self, urls=[], filter_all=False, order=0):
+        self.urls = urls
+        self.filter_all = filter_all
+        self.order = order
 
-    def __init__(self, path):
+    def __call__(self, cls):
+        filter_obj = cls()
+        filter_obj.urls = self.urls
+        filter_obj.filter_all = self.filter_all
+        filter_obj.order = self.order
+        FILTERS.append(filter_obj)
+
+class GET(RequestHandler):
+    def __init__(self, path, headers=None, body=None, json=None):
+        super().__init__(headers, body, json)
         self.path = path
 
-    def __call__(self, function):
-        GET.resource_count += 1
-        resource_class = type("Resource{}".format(GET.resource_count), (Resource,), {})
-        def get(s, *args, **kwargs):
-            path_arg_tuple = tuple(kwargs[arg] for arg in kwargs)
-            result = function(*generate_arg_tuple(function, path_arg_tuple, request.args))
-            return force_jsonizable(result)
-        resource_class.get = get
+    def __call__(self, func):
+        return _wrap_http(self.path, ["GET"], func)
 
-        API.add_resource(resource_class, self.path)
+
+class POST(RequestHandler):
+    def __init__(self, path, headers=None, body=None, json=None):
+        super().__init__(headers, body, json)
+        self.path = path
+
+    def __call__(self, func):
+        return _wrap_http(self.path, ["POST"], func)
