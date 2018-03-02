@@ -92,5 +92,5 @@ def _wrap_http(url, methods, func):
 
     global ENDP_COUNT
     ENDP_COUNT += 1
-    APP.add_url_rule(url, "endpoint{}".format(ENDP_COUNT), wrapper, methods=["POST"])
+    APP.add_url_rule(url, "endpoint{}".format(ENDP_COUNT), wrapper, methods=methods)
 
