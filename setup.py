@@ -14,7 +14,8 @@ setup(
         'sqlalchemy',
         'importlib',
         'xmltodict',
-        'clinodes'
+        'clinodes',
+        'inflection'
     ],
     url='',
     license='',
