@@ -1,3 +1,6 @@
+import inflection
+
+
 def build_xml(root_package, name):
     xml = """
     <configuration>
@@ -18,6 +21,20 @@ def build_xml(root_package, name):
     """.format(name, root_package)
     return xml
 
+def build_entity_file(root_package_name, name, columns):
+    name = inflection.camelize(name, uppercase_first_letter=True)
+    entities = "".join("{} = Column()\n\t".format(col) for col in columns)
+    file_content = """from sqlalchemy import *
+
+from gofri.lib.main import Base
+
+class {}(Base):
+    __tablename__ = '{}s'
+    
+    {}    
+    
+""".format(name, name, entities)
+    return file_content
 
 def build_start_file_content(root_package_name):
     start_file_content = """import os
