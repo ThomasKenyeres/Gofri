@@ -8,6 +8,11 @@ from flask_restful import Api
 from gofri.lib.conf.config_reader import ConfigReader
 from gofri.lib.pip.pip_handler import PIPHandler
 
+from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relation, sessionmaker
+
+
 ROOT = ""
 ROOT_PATH = ""
 
@@ -34,12 +39,13 @@ def init_config():
     if isinstance(DEPENDENCIES, str):
         DEPENDENCIES = [DEPENDENCIES]
 
-class ASD:
-    pass
-
 
 APP = Flask(__name__)
 API = Api(APP)
+
+
+Base = declarative_base()
+
 
 
 def run():
