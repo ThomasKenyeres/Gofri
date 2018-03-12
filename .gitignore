@@ -8,3 +8,8 @@ refresh.sh
 
 wiki_notes/*
 files/*
+
+# Distribution
+MANIFEST
+dist/*
+setup.py
