@@ -2,7 +2,7 @@
 
 Python3 web framework with builtin SQL-support, ORM, URL-mappings and easily configurable module management and inner builtin packages.
 
-Uses on Flask and SqlAlchemy.
+Uses Flask and SqlAlchemy.
 
 ### Install
 
