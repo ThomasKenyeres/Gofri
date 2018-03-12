@@ -13,3 +13,6 @@ files/*
 MANIFEST
 dist/*
 setup.py
+
+# TEMP
+docs/*
