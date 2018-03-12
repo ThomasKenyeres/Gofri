@@ -6,9 +6,7 @@ Uses on Flask and SqlAlchemy.
 
 ### Install
 
-To use the framework you can install an early version with running
-```setup.py install``` in the 'Gofri' directory.
-
+To install latest version run ```pip3 install Gofri```.
 
 ### Create project
 
