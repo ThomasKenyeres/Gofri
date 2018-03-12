@@ -7,3 +7,4 @@ build/*
 refresh.sh
 
 wiki_notes/*
+files/*
