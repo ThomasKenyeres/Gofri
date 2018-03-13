@@ -2,6 +2,7 @@ import os
 
 from gofri.lib.project_generator.templates import *
 from gofri.lib.project_generator.tools import get_project_name, make_python_packages, init_python_package
+from gofri.lib.project_generator.venv_generator import create_venv
 
 
 def generate_start_file(root_package, name):
@@ -27,9 +28,13 @@ def generate_web_dir(root_package):
 def generate_back_dir(root_package):
     make_python_packages(root_package, "{}.back.controller".format(os.path.basename(root_package)))
 
-def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_xml=False):
+def generate_project(path, name, web=True, back=True, db=True, orm=True, custom_xml=False,
+                     use_venv=False):
     root_package_name = get_project_name(name)
     root_package = "{}/{}/{}".format(path, name, root_package_name)
+
+    if use_venv:
+        create_venv("{}/{}".format(path, name))
 
     init_python_package(root_package)
 
