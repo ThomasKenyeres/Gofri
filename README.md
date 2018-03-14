@@ -4,7 +4,7 @@ Python3 web framework with builtin SQL-support, ORM, URL-mappings and easily con
 
 Uses Flask and SqlAlchemy.
 
-Documented at: <gofri.readthedocs.io>
+Documented at: http://gofri.readthedocs.io
 
 ### Install
 
