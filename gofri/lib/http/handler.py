@@ -1,6 +1,6 @@
 class RequestHandler(object):
-    def __init__(self, headers=None, body=None, json=None):
+    def __init__(self, headers="", body="", json=""):
         self.path = None
-        self.headers = headers
-        self.body = body
-        self.json = json
+        self.headers = [param.strip() for param in headers.split(";")]
+        self.body = [param.strip() for param in body.split(";")]
+        self.json = [param.strip() for param in json.split(";")]
