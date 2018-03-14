@@ -72,14 +72,51 @@ def force_jsonizable(obj):
 
 
 
-def _wrap_http(url, methods, func):
+def _wrap_http(url, methods, func, handler):
+
     def wrapper(*args, **kwargs):
         order_filters()
         result = run_filters(request, Response())
         _request = result["request"]
         _response = result["response"]
-        path_arg_tuple = tuple(kwargs[arg] for arg in kwargs)
-        resp_body = func(*generate_arg_tuple(func, path_arg_tuple, request.args))
+
+        f_signature = signature(func).parameters.keys()
+        kw = {}
+
+        if hasattr(handler, "params"):
+            for p in handler.params:
+                if p in f_signature:
+                    if not p in kw:
+                        kw[p] = _request.args.get(p)
+                    else:
+                        raise Exception("ArgName Conflict")
+
+        for p in handler.body:
+            if p in f_signature:
+                if not p in kw:
+                    kw[p] = _request.form.get(p)
+                else:
+                    raise Exception("ArgName Conflict")
+
+        for p in handler.headers:
+            if p in f_signature:
+                if not p in kw:
+                    kw[p] = _request.headers.get(p)
+                else:
+                    raise Exception("ArgName Conflict")
+
+        for p in handler.json:
+            if p in f_signature:
+                if not p in kw:
+                    kw[p] = _request.json.get(p)
+                else:
+                    raise Exception("ArgName Conflict")
+
+        args = kwargs.values()
+        kwargs = kw
+
+
+        resp_body = func(*args, **kwargs)
 
         response = Response(
             response=response_with(force_jsonizable(resp_body)),
