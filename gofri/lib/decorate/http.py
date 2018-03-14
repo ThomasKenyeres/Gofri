@@ -1,3 +1,4 @@
+from gofri.lib.http.filter import Filter
 from gofri.lib.decorate.tools import _wrap_http
 from gofri.lib.http.filter import FILTERS
 from gofri.lib.http.handler import RequestHandler
@@ -10,6 +11,10 @@ class GofriFilter:
         self.order = order
 
     def __call__(self, cls):
+        if not Filter in cls.__bases__:
+            cls._continue = Filter._continue
+            pass
+        print(cls.__bases__)
         filter_obj = cls()
         filter_obj.urls = self.urls
         filter_obj.filter_all = self.filter_all
