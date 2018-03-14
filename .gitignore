@@ -5,6 +5,7 @@ build/*
 #setup.py
 *test.py*
 refresh.sh
+Makefile
 
 wiki_notes/*
 files/*
