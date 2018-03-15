@@ -34,14 +34,14 @@ class ControllerGeneratorNode(ArgNode):
         )
 
 
-class ModelGeneratorNode(ArgNode):
+class DtoGeneratorNode(ArgNode):
     def setup(self):
         self.expects_more = False
         self.enable_any = True
 
     def run(self, *args_remained):
         name = args_remained[0]
-        inner_path = "{}.back.model".format(data["root_base"])
+        inner_path = "{}.back.dto".format(data["root_base"])
         generate_module(
             root_package_path=data["root"],
             module_package=inner_path,
@@ -104,7 +104,7 @@ class GenerateNode(ArgNode):
         self.commands = {
             "module" : ModuleGeneratorNode,
             "controller": ControllerGeneratorNode,
-            "model": ModelGeneratorNode,
+            "dto": DtoGeneratorNode,
             "service": ServiceGeneratorNode,
             "entity": EntityGeneratorNode,
             "filter": FilterGeneratorNode
