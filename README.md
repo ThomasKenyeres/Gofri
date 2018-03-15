@@ -6,6 +6,16 @@ Uses Flask and SqlAlchemy.
 
 Documented at: http://gofri.readthedocs.io
 
+---
+**NEXT VERSION: 1.0.3**
+
+0. JWT Authentication
+0. Filter generation with generate.py
+0. Changes in generate.py commands
+0. New features in HTTP decorators &#10004;
+0. Bug fixes
+---
+
 ### Install
 
 To install latest version run ```pip3 install Gofri```.
