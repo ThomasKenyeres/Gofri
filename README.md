@@ -20,6 +20,9 @@ Documented at: http://gofri.readthedocs.io
 
 To install latest version run ```pip3 install Gofri```.
 
+Latest version: ```1.0.1```
+
+
 ### Create project
 
 To create a project run ```python3 -m gofri.generate_project <ProjectName>``` and the project will be created in the current directory.
