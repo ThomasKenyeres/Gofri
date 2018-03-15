@@ -15,6 +15,7 @@ Documented at: http://gofri.readthedocs.io
 0. New features in HTTP decorators &#10004;
 0. Bug fixes &#10004;
 ---
+*&#10004; : available in developer version(this repo).
 
 ### Install
 
