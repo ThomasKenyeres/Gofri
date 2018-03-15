@@ -21,6 +21,17 @@ def build_xml(root_package, name):
     """.format(name, root_package)
     return xml
 
+def build_filter_file(root_package_name, name):
+    file_content = """from gofri.lib.decorate.http import GofriFilter
+from gofri.lib.http.filter import Filter
+
+@GofriFilter()
+class {}(Filter):
+    def filter(self, request, response):
+        return self._continue(request, response)
+""".format(inflection.camelize(name))
+    return file_content
+
 def build_entity_file(root_package_name, name, columns):
     name = inflection.camelize(name, uppercase_first_letter=True)
     entities = "".join("{} = Column()\n\t".format(col) for col in columns)

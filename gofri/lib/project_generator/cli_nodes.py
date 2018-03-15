@@ -1,7 +1,7 @@
 from clinodes.nodes import ArgNode
 
 from gofri.lib.project_generator.module_generator import generate_module
-from gofri.lib.project_generator.templates import build_entity_file
+from gofri.lib.project_generator.templates import build_entity_file, build_filter_file
 
 data = {}
 
@@ -82,6 +82,23 @@ class EntityGeneratorNode(ArgNode):
         )
 
 
+class FilterGeneratorNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+        self.enable_any = True
+
+    def run(self, *args_remained):
+        name = args_remained[0]
+        print(name)
+        inner_path = "{}.back.filter".format(data["root_base"])
+        generate_module(
+            root_package_path=data["root"],
+            module_package=inner_path,
+            name=name,
+            template=build_filter_file(data["root"], name)
+        )
+
+
 class GenerateNode(ArgNode):
     def setup(self):
         self.commands = {
@@ -89,7 +106,8 @@ class GenerateNode(ArgNode):
             "controller": ControllerGeneratorNode,
             "model": ModelGeneratorNode,
             "service": ServiceGeneratorNode,
-            "entity": EntityGeneratorNode
+            "entity": EntityGeneratorNode,
+            "filter": FilterGeneratorNode
         }
         self.expects_more = True
 
