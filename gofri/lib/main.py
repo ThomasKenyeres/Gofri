@@ -66,10 +66,11 @@ API = Api(APP)
 Base = declarative_base()
 
 def integrate_custom_modules():
-    for cmod in CUSTOM_MODULES:
-        # print("CUSTOM MODULE: {}".format(cmod))
-        if isinstance(cmod, str):
-            runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
+    #TODO: Check more cases
+    if CUSTOM_MODULES is not None:
+        for cmod in CUSTOM_MODULES:
+            if isinstance(cmod, str):
+                runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
 
 def run():
     global HOST
