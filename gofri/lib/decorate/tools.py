@@ -91,12 +91,13 @@ def _wrap_http(url, methods, func, handler):
                     else:
                         raise Exception("ArgName Conflict")
 
-        for p in handler.body:
-            if p in f_signature:
-                if not p in kw:
-                    kw[p] = _request.form.get(p)
-                else:
-                    raise Exception("ArgName Conflict")
+        if hasattr(handler, "body"):
+            for p in handler.body:
+                if p in f_signature:
+                    if not p in kw:
+                        kw[p] = _request.form.get(p)
+                    else:
+                        raise Exception("ArgName Conflict")
 
         for p in handler.headers:
             if p in f_signature:
