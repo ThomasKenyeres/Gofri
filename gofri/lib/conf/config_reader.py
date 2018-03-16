@@ -1,7 +1,7 @@
 from gofri.lib.xml.parser import XMLParser
 
 
-class ConfigReader:
+class XMLConfigReader:
     def __init__(self, root_path):
         self.root_path = root_path
         self.conf_xml_path = self.root_path + "/conf.xml"
@@ -24,4 +24,3 @@ class ConfigReader:
                 return None
             result = result[key]
         return result
-
