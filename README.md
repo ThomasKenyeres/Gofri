@@ -1,18 +1,18 @@
 # GOFRI
 
 Python3 web framework with builtin SQL-support, ORM, URL-mappings and easily configurable module management and inner builtin packages.
-
 Uses Flask and SqlAlchemy.
 
 Documented at: http://gofri.readthedocs.io
 
----
-**NEXT VERSION: 1.0.3**
+**LATEST: 1.0.3**
 
-0. Filter generation with generate.py &#10004;
-0. Changes in generate.py commands &#10004;
-0. New features in HTTP decorators &#10004;
-0. Bug fixes &#10004;
+---
+**NEXT VERSION: 2.0.0**
+
+1. Extensibility (custom modules, automatic modules)
+1. JWT module
+1. New config possibilities
 ---
 *&#10004; : available in developer version(this repo).
 
