@@ -20,8 +20,6 @@ Documented at: http://gofri.readthedocs.io
 
 To install latest version run ```pip3 install Gofri```.
 
-Latest version: ```1.0.1```
-
 
 ### Create project
 
