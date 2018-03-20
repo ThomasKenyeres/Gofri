@@ -2,12 +2,6 @@ import json
 from collections import OrderedDict
 from inspect import signature
 
-from flask import request, Response
-
-from gofri.lib.main import APP
-
-from gofri.lib.http.filter import FILTERS, ENDP_COUNT
-
 
 def response_with(jsonizable):
     if isinstance(jsonizable, (int, str, float, bool, bytes)):
@@ -27,6 +21,7 @@ def order_filters():
             d[f_obj.order] = f_obj
     FILTERS = list(OrderedDict(d).values()) + rest
 
+
 def run_filters(request, response):
     _request = request
     _response = response
@@ -41,7 +36,6 @@ def run_filters(request, response):
             _request = result["request"]
             _response = result["response"]
     return {"request": request, "response": response}
-
 
 
 def generate_arg_tuple(function, path_arg_tuple, request_args):
@@ -64,71 +58,10 @@ def force_jsonizable(obj):
         for i in range(len(obj)):
             obj[i] = force_jsonizable(obj[i])
         return obj
-    else:
+    elif isinstance(obj, tuple):
+        return list(obj)
+    elif obj is not None:
         dict_obj = obj.__dict__
         for key in dict_obj:
             dict_obj[key] = force_jsonizable(dict_obj[key])
         return dict_obj
-
-
-
-def _wrap_http(url, methods, func, handler):
-
-    def wrapper(*args, **kwargs):
-        order_filters()
-        result = run_filters(request, Response())
-        _request = result["request"]
-        _response = result["response"]
-
-        f_signature = signature(func).parameters.keys()
-        kw = {}
-
-        if hasattr(handler, "params"):
-            for p in handler.params:
-                if p in f_signature:
-                    if not p in kw:
-                        kw[p] = _request.args.get(p)
-                    else:
-                        raise Exception("ArgName Conflict")
-
-        if hasattr(handler, "body"):
-            for p in handler.body:
-                if p in f_signature:
-                    if not p in kw:
-                        kw[p] = _request.form.get(p)
-                    else:
-                        raise Exception("ArgName Conflict")
-
-        for p in handler.headers:
-            if p in f_signature:
-                if not p in kw:
-                    kw[p] = _request.headers.get(p)
-                else:
-                    raise Exception("ArgName Conflict")
-
-        for p in handler.json:
-            if p in f_signature:
-                if not p in kw:
-                    kw[p] = _request.json.get(p)
-                else:
-                    raise Exception("ArgName Conflict")
-
-        args = kwargs.values()
-        kwargs = kw
-
-
-        resp_body = func(*args, **kwargs)
-
-        response = Response(
-            response=response_with(force_jsonizable(resp_body)),
-            status=_response.status,
-            headers=_response.headers,
-            mimetype=_response.mimetype,
-            content_type=_response.content_type
-        )
-        return response
-
-    global ENDP_COUNT
-    ENDP_COUNT += 1
-    APP.add_url_rule(url, "endpoint{}".format(ENDP_COUNT), wrapper, methods=methods)
-
