@@ -1,7 +1,6 @@
-from gofri.lib.http.filter import Filter
-from gofri.lib.decorate.tools import _wrap_http
 from gofri.lib.http.filter import FILTERS
-from gofri.lib.http.handler import RequestHandler
+from gofri.lib.http.filter import Filter
+from gofri.lib.http.handler import RequestHandler, PostBasedRequestHandler
 
 
 class GofriFilter:
@@ -20,50 +19,23 @@ class GofriFilter:
         FILTERS.append(filter_obj)
 
 class GET(RequestHandler):
-    def __init__(self, path, headers="", json="", params=""):
-        super().__init__(headers, json, params)
-        self.path = path
+    pass
 
 
-    def __call__(self, func):
-        return _wrap_http(self.path, ["GET"], func, self)
+class POST(PostBasedRequestHandler):
+    def _set_methods(self):
+        return ["POST"]
+
+class HEAD(PostBasedRequestHandler):
+    def _set_methods(self):
+        return ["HEAD"]
 
 
-class POST(RequestHandler):
-    def __init__(self, path, headers="", body="", json="", params=""):
-        super().__init__(headers, json, params)
-        self.path = path
-        self.body = [param.strip() for param in body.split(";")]
-
-    def __call__(self, func):
-        return _wrap_http(self.path, ["POST"], func, self)
+class PUT(PostBasedRequestHandler):
+    def _set_methods(self):
+        return ["PUT"]
 
 
-class HEAD(RequestHandler):
-    def __init__(self, path, headers="", body="", json="", params=""):
-        super().__init__(headers, json, params)
-        self.path = path
-        self.body = [param.strip() for param in body.split(";")]
-
-    def __call__(self, func):
-        return _wrap_http(self.path, ["HEAD"], func, self)
-
-
-class PUT(RequestHandler):
-    def __init__(self, path, headers="", body="", json="", params=""):
-        super().__init__(headers, json, params)
-        self.path = path
-        self.body = [param.strip() for param in body.split(";")]
-
-    def __call__(self, func):
-        return _wrap_http(self.path, ["PUT"], func, self)
-
-
-class DELETE(RequestHandler):
-    def __init__(self, path, headers="", body="", json="", params=""):
-        super().__init__(headers, json, params)
-        self.path = path
-        self.body = [param.strip() for param in body.split(";")]
-
-    def __call__(self, func):
-        return _wrap_http(self.path, ["DELETE"], func, self)
+class DELETE(PostBasedRequestHandler):
+    def _set_methods(self):
+        return ["DELETE"]

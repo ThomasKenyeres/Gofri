@@ -1,19 +1,14 @@
+import os
 import runpy
 import shutil
 from configparser import ConfigParser
 
 import pkg_resources
-
-from flask import Flask
-from flask_restful import Api
+from sqlalchemy.ext.declarative import declarative_base
 
 from gofri.lib.conf.config_reader import XMLConfigReader
+from gofri.lib.http.app import Application
 from gofri.lib.pip.pip_handler import PIPHandler
-
-from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relation, sessionmaker
-
 
 ROOT = ""
 ROOT_PATH = ""
@@ -28,9 +23,6 @@ MYSQL_CONFIG = None
 DEPENDENCIES = None
 CUSTOM_MODULES = None
 AUTO_PIP = False
-
-
-
 
 def init_config():
     global CONF, HOST, PORT, DATABASE_RDBMS, MYSQL_CONFIG, DEPENDENCIES, CUSTOM_MODULES
@@ -59,9 +51,11 @@ def init_custom_config(filename):
 CUSTOM_CONFIG = {}
 
 
-APP = Flask(__name__)
-API = Api(APP)
-
+APP = Application(static_conf={
+    "enable": True,
+    "dir": "/static",
+    "path": os.path.join(os.path.dirname(__file__), "static")
+})
 
 Base = declarative_base()
 
