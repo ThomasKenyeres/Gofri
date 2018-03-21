@@ -16,6 +16,11 @@ class Wrapper(object):
         else:
             return attr
 
+    def __setattr__(self, key, value):
+        object.__setattr__(self, key, value)
+        self.cls.__setattr__(key, value)
+
+
 class Request(Wrapper):
     def __init__(self, environ, populate_request=True, shallow=False):
         Wrapper.__init__(self)
