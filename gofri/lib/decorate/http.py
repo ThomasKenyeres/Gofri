@@ -1,3 +1,5 @@
+from gofri.lib.http.const import RequestMethod
+
 from gofri.lib.http.filter import FILTERS
 from gofri.lib.http.filter import Filter
 from gofri.lib.http.handler import RequestHandler, PostBasedRequestHandler
@@ -24,18 +26,59 @@ class GET(RequestHandler):
 
 class POST(PostBasedRequestHandler):
     def _set_methods(self):
-        return ["POST"]
+        return [RequestMethod.POST]
 
 class HEAD(PostBasedRequestHandler):
     def _set_methods(self):
-        return ["HEAD"]
+        return [RequestMethod.POST]
 
 
 class PUT(PostBasedRequestHandler):
     def _set_methods(self):
-        return ["PUT"]
+        return [RequestMethod.PUT]
 
 
 class DELETE(PostBasedRequestHandler):
     def _set_methods(self):
-        return ["DELETE"]
+        return [RequestMethod.DELETE]
+
+
+class PATCH(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.PATCH]
+
+class COPY(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.COPY]
+
+class OPTIONS(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.OPTIONS]
+
+class LINK(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.LINK]
+
+class UNLINK(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.UNLINK]
+
+class PURGE(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.PURGE]
+
+class LOCK(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.LOCK]
+
+class UNLOCK(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.UNLOCK]
+
+class PROPFIND(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.PROPFIND]
+
+class VIEW(PostBasedRequestHandler):
+    def _set_methods(self):
+        return [RequestMethod.VIEW]
