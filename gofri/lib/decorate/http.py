@@ -19,6 +19,7 @@ class GofriFilter:
         filter_obj.filter_all = self.filter_all
         filter_obj.order = self.order
         FILTERS.append(filter_obj)
+        return filter_obj
 
 class GET(RequestHandler):
     pass
