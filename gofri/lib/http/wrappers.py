@@ -2,7 +2,7 @@ import json
 
 from werkzeug.wrappers import Request as Req, Response as Resp
 
-from gofri.lib.decorate.tools import response_with, force_jsonizable
+from gofri.lib.http.tools import response_with, force_jsonizable
 
 
 class Wrapper(object):

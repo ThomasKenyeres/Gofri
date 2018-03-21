@@ -2,7 +2,7 @@ from inspect import signature
 
 from werkzeug.wrappers import Response as Resp
 
-from gofri.lib.decorate.tools import order_filters, run_filters
+from gofri.lib.http.tools import order_filters, run_filters
 from gofri.lib.http.wrappers import Response
 
 
