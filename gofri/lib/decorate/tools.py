@@ -26,15 +26,18 @@ def run_filters(request, response):
     _request = request
     _response = response
     for f_obj in FILTERS:
-        if not f_obj.filter_all:
-            if request.path in f_obj.urls:
+        try:
+            if not f_obj.filter_all:
+                if request.path in f_obj.urls:
+                    result = f_obj.filter(_request, _response)
+                    _request = result["request"]
+                    _response = result["response"]
+            else:
                 result = f_obj.filter(_request, _response)
                 _request = result["request"]
                 _response = result["response"]
-        else:
-            result = f_obj.filter(_request, _response)
-            _request = result["request"]
-            _response = result["response"]
+        except TypeError as e:
+            raise TypeError("Previous filter returned NoneType")
     return {"request": request, "response": response}
 
 
