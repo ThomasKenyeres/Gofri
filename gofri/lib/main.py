@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, sessionmaker
 
 from gofri.lib.conf.config_reader import XMLConfigReader
+import gofri.lib.globals as GLOB
 from gofri.lib.http.app import Application
 from gofri.lib.pip.pip_handler import PIPHandler
 
@@ -70,10 +71,10 @@ def integrate_custom_modules():
                 runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
 
 def run():
-    global HOST
-    if HOST == None:
-        HOST = "127.0.0.1"
-    APP.run(port=int(PORT), host=HOST)
+    conf = GLOB.Config()
+    if conf.HOST == None:
+        conf.HOST = "127.0.0.1"
+    APP.run(port=int(conf.PORT), host=conf.HOST)
 
 
 def main(root_path, modules):
@@ -83,11 +84,7 @@ def main(root_path, modules):
     )
     print(banner)
 
-    global C, ROOT_PATH, CUSTOM_CONFIG
-    C = XMLConfigReader(root_path)
-    ROOT_PATH = root_path
-
-    init_config()
+    GLOB.init_conf(root_path)
     piphandler = PIPHandler()
     piphandler.package_names = DEPENDENCIES
 
@@ -96,6 +93,5 @@ def main(root_path, modules):
 
     CUSTOM_CONFIG = init_custom_config("custom-conf.ini")
     integrate_custom_modules()
-
 
     run()
