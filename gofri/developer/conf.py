@@ -4,7 +4,7 @@ from gofri.lib.globals import Config
 
 
 class LocalConfigIO(object):
-    def __init__(self, filename="custom-conf.ini"):
+    def __init__(self, filename="local.ini"):
         self.__local_conf_path = "{}/{}".format(Config().ROOT_PATH, filename)
         self.__config = configparser.ConfigParser()
         self.update()
