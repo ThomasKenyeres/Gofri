@@ -1,3 +1,4 @@
+import importlib
 import os
 import runpy
 import shutil
@@ -33,8 +34,8 @@ Base = declarative_base()
 
 def integrate_custom_modules():
     #TODO: Check more cases
-    if GLOB.Config().CUSTOM_MODULES is not None:
-        for cmod in GLOB.Config().CUSTOM_MODULES:
+    if GLOB.Config().EXTENSIONS is not None:
+        for cmod in GLOB.Config().EXTENSIONS:
             if isinstance(cmod, str):
                 runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
 
@@ -61,5 +62,7 @@ def main(root_path, modules):
 
     CUSTOM_CONFIG = init_custom_config("custom-conf.ini")
     integrate_custom_modules()
+
+    importlib.import_module("modules", modules)
 
     run()
