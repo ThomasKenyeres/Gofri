@@ -10,8 +10,10 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, sessionmaker
 
+from gofri.developer.conf import LocalConfigIO
 from gofri.lib.conf.config_reader import XMLConfigReader
 import gofri.lib.globals as GLOB
+from gofri.lib.conf.custom import init_custom_conf_file
 from gofri.lib.http.app import Application
 from gofri.lib.pip.pip_handler import PIPHandler
 
@@ -35,9 +37,11 @@ Base = declarative_base()
 def integrate_custom_modules():
     #TODO: Check more cases
     if GLOB.Config().EXTENSIONS is not None:
+        init_custom_conf_file(GLOB.Config().ROOT_PATH)
         for cmod in GLOB.Config().EXTENSIONS:
             if isinstance(cmod, str):
-                runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
+                if GLOB.Config().EXT_CONF_ENABLE_AUTORUN:
+                    runpy.run_module("{}.main".format(cmod), run_name="__main__", alter_sys=True)
 
 def run():
     conf = GLOB.Config()
