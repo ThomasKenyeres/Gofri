@@ -48,17 +48,17 @@ class {}(Base):
     return file_content
 
 def build_start_file_content(root_package_name):
-    start_file_content = """import os
+    start_file_content = """import importlib
+import os
 import sys
 from gofri.lib.main import main
 
 sys.path.append(sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-
-from {} import modules
     
 if __name__ == '__main__':
     ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
-    main(ROOT_PATH, modules)
+    mod = importlib.__import__("{}")
+    main(ROOT_PATH, mod)
 """.format(root_package_name)
     return start_file_content
 
