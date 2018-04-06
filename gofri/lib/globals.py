@@ -23,7 +23,7 @@ def init_conf(root_path):
     conf.DATABASE_RDBMS = C.get_dict_config(conf.CONF, "database", "rdbms")
     conf.MYSQL_CONFIG = C.get_dict_config(conf.CONF, "database", "mysql-config")
     conf.DEPENDENCIES = C.get_dict_config(conf.CONF, "dependencies", "dependency")
-    conf.EXTENSIONS = C.get_dict_config(conf.CONF, "extensions", "extension")
+    conf.EXTENSIONS = C.get_dict_config(conf.CONF, "extensions")
     conf.EXT_CONF_ENABLE_AUTORUN = C.get_dict_config(conf.CONF, "extension-conf", "enable-autorun") == "True"
     conf.EXT_CONF_ENABLE_CIO = C.get_dict_config(conf.CONF, "extension-conf", "enable-auto-config") == "True"
 
