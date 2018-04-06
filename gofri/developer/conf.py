@@ -8,8 +8,11 @@ class SectionWrapper:
         self.confdict = confdict
 
 class LocalConfigIO(object):
-    def __init__(self, filename="local.ini"):
-        self.__local_conf_path = "{}/{}".format(Config().ROOT_PATH, filename)
+    def __init__(self, filename="local.ini", fullpath=None):
+        if fullpath is not None:
+            self.__local_conf_path = fullpath
+        else:
+            self.__local_conf_path = "{}/{}".format(Config().ROOT_PATH, filename)
         self.__config = configparser.ConfigParser()
         self.update()
 
@@ -36,15 +39,8 @@ class LocalConfigIO(object):
         with open(self.__local_conf_path, "a") as conf_file:
             conf_file.write(string)
 
-    def merge(self, source, to_file=None):
-        #if Config().EXT_CONF_ENABLE_CIO:
-        if to_file is None:
-            to_file = "{}/{}".format(Config().ROOT_PATH, "local.ini")
-        if True:
-            with open(self.__local_conf_path, "a") as targetf:
-                content = ""
-                with open(self.__local_conf_path, "r") as sourcef:
-                    content = sourcef.read()
-                targetf.write(content)
-        #if Config().EXT_CONF_ENABLE_CIO:
-            #with open(self.__local_conf_path, )
+    def merge(self, source_file):
+        dio = LocalConfigIO(fullpath=source_file)
+        for section in dio.config():
+            self[section] = dio[section]
+        self.commit()
