@@ -1,14 +1,12 @@
 import os
 
 import werkzeug.exceptions as E
-from gofri.lib.http.error import HttpStatusError
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.routing import Map, Rule
 from werkzeug.serving import run_simple
 from werkzeug.wsgi import SharedDataMiddleware
 
 from gofri.lib.http.control import HttpWrapper
-#from gofri.lib.http.tools import cors_is_valid
 from gofri.lib.http.cors import cors_is_valid
 from gofri.lib.http.wrappers import Response, Request
 
@@ -26,6 +24,7 @@ class Application(object):
         self.endpoints = {}
         self.methods = {}
         self.calldata = {}
+        self.cors_endpoints = []
         self.wrapper = HttpWrapper()
         self._setup_wsgi(enable_static=True, static_dir=static_conf["dir"], static_path=static_conf["path"])
 
@@ -81,6 +80,9 @@ class Application(object):
         self.endpoints[endp_name] = func
         self.methods[endp_name] = methods
 
+        if cors:
+            self.cors_endpoints.append(endp_name)
+
     def render(self, name, **context):
         template = self.jinja_env.get_template(name)
         return Response(template.render(context), mimetype="text/html", content_type="text/html")
@@ -88,27 +90,20 @@ class Application(object):
     def dispatch_request(self, request):
         adapter = self.urls.bind_to_environ(request.environ)
         try:
-            headers = {}
-            headers["Access-Control-Allow-Origin"] = "*"
-            headers["Access-Control-Allow-Headers"] = "Content-Type, Accept, X-Auth-Token, asd"
-
             endpoint, values = adapter.match()
-
+            cors_enabled = endpoint in self.cors_endpoints
             if not request.method in self.methods[endpoint]:
-                
+
                 if not cors_is_valid(request, self.methods):
                     raise E.MethodNotAllowed()
-                else:
-                    resp = self.endpoints[endpoint](request, *(), **values)
-
-                    resp.headers = headers
-                    return resp
 
 
-            args = ()
+            resp = self.endpoints[endpoint](request, *(), **values)
 
-            resp = self.endpoints[endpoint](request, *args, **values)
-            resp.headers = headers
+            if cors_enabled:
+                resp.headers["Access-Control-Allow-Origin"] = "*"
+                resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Accept, X-Auth-Token, asd"
+
             return resp
         except E.HTTPException as e:
             return Response(
