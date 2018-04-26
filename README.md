@@ -79,7 +79,7 @@ Or add a controller more easily:
 MyFirstProject/my_first_project/generate.py generate controller my_controller
 ```
 
-###Standalone application
+### Standalone application
 You can serve a gofri application without creating a full project.
 Here is an example, just copy it into a file and run it:
 ```python
