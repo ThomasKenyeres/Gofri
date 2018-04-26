@@ -5,6 +5,7 @@ import shutil
 from configparser import ConfigParser
 
 import pkg_resources
+import sys
 from clinodes.nodes import ArgNode, Switch
 
 from sqlalchemy import *
@@ -14,18 +15,18 @@ from sqlalchemy.orm import relation, sessionmaker
 from gofri.developer.conf import LocalConfigIO
 from gofri.lib.conf.config_reader import XMLConfigReader
 import gofri.lib.globals as GLOB
-from gofri.lib.conf.custom import init_custom_conf_file, load_default_config
+from gofri.lib.conf.local import init_local_conf_file, load_default_config
 from gofri.lib.http.app import Application
 from gofri.lib.pip.pip_handler import PIPHandler
 
 
-def init_custom_config(filename):
+def init_extension_config(filename):
     fullpath = "{}/{}".format(GLOB.Config().ROOT_PATH, filename)
     conf = ConfigParser()
     conf.read(fullpath)
     return conf
 
-CUSTOM_CONFIG = {}
+EXTENSION_CONFIG = {}
 
 
 APP = Application(static_conf={
@@ -36,10 +37,10 @@ APP = Application(static_conf={
 
 Base = declarative_base()
 
-def integrate_custom_modules(autoconf=False):
+def integrate_extensions(autoconf=False):
     root_path = GLOB.Config().ROOT_PATH
     if GLOB.Config().EXTENSIONS is not None:
-        init_custom_conf_file(root_path)
+        init_local_conf_file(root_path)
         exts = GLOB.Config().EXTENSIONS
         for cmod in GLOB.Config().EXTENSIONS:
             ext = exts["extension"]
@@ -58,35 +59,48 @@ def run():
         conf.HOST = "127.0.0.1"
     APP.run(port=int(conf.PORT), host=conf.HOST)
 
-def start(root_path, modules, autoconf=False):
+def start(root_path, modules, autoconf=False, auto_install=False):
     banner = "GOFRI -- version: {}\n{}\n".format(
         pkg_resources.get_distribution("gofri").version,
         "#" * shutil.get_terminal_size().columns
     )
     print(banner)
 
+
     GLOB.init_conf(root_path)
     piphandler = PIPHandler()
-    piphandler.package_names = GLOB.Config().DEPENDENCIES
+    piphandler.packages = GLOB.Config().DEPENDENCIES
 
-    piphandler.install()
+    if auto_install:
+        piphandler.install()
+
+
     print("All required dependencies are installed")
 
-    CUSTOM_CONFIG = init_custom_config("custom-conf.ini")
-    integrate_custom_modules(autoconf)
+    CUSTOM_CONFIG = init_extension_config("custom-conf.ini")
+    integrate_extensions(autoconf)
 
     importlib.import_module("modules", modules)
 
     run()
 
 
-do_autoconf = False
-
 def main(root_path, modules):
+    GLOB.Config().AUTO_INSTALL = False
+    do_autoconf = False
+
+    class InstallerSwitch(Switch):
+        def setup(self):
+            self.expects_more = False
+
+        def run(self, *args):
+            GLOB.Config().AUTO_INSTALL = True
 
     class UpdaterSwitch(Switch):
+        def setup(self):
+            self.expects_more = False
+
         def run(self, *args):
-            global do_autoconf
             do_autoconf = True
 
     class RootNode(ArgNode):
@@ -94,12 +108,13 @@ def main(root_path, modules):
             self.expects_more = False
             self.switches = {
                 "--enable-default": UpdaterSwitch,
-                "-ed": UpdaterSwitch
+                "-ed": UpdaterSwitch,
+                "--install": InstallerSwitch
             }
 
         def run(self, *args_remained):
+            do_auto_install = GLOB.Config().AUTO_INSTALL
             if len(args_remained) == 0:
-                global do_autoconf
-                start(root_path, modules, autoconf=do_autoconf)
+                start(root_path, modules, autoconf=do_autoconf, auto_install=do_auto_install)
 
     RootNode()
