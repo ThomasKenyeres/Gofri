@@ -17,6 +17,7 @@ Documented at: http://gofri.readthedocs.io
 1. Local config encryption
 1. Template projects for getting started
 1. Virtualenv support
+1. Standalone mode (no need to create project) &#10004; 
 ---
 *&#10004; : available in developer version(this repo).
 
@@ -76,4 +77,18 @@ Or add a controller more easily:
 
 ```
 MyFirstProject/my_first_project/generate.py generate controller my_controller
+```
+
+###Standalone application
+You can serve a gofri application without creating a full project.
+Here is an example, just copy it into a file and run it:
+```python
+from gofri.lib.decorate.http import GET
+from gofri.lib.main import APP
+
+@GET(path="/example")
+def handle1():
+    return "This is a response"
+
+APP.run()
 ```
