@@ -73,8 +73,7 @@ class Application(object):
             body_names,
             json_names,
             json,
-            response_type,
-            cors
+            response_type
         )
 
         self.endpoints[endp_name] = func
