@@ -1,12 +1,15 @@
 import os
 
 import werkzeug.exceptions as E
+from gofri.lib.http.error import HttpStatusError
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.routing import Map, Rule
 from werkzeug.serving import run_simple
 from werkzeug.wsgi import SharedDataMiddleware
 
 from gofri.lib.http.control import HttpWrapper
+#from gofri.lib.http.tools import cors_is_valid
+from gofri.lib.http.cors import cors_is_valid
 from gofri.lib.http.wrappers import Response, Request
 
 
@@ -50,7 +53,7 @@ class Application(object):
 
     def set_url_endpoint(self, path, func, methods, request_nm="",
                          params_nm="", headers_nm="", body_nm="",
-                         json_nm="", json="", response_type=""):
+                         json_nm="", json="", response_type="", cors=False):
 
         endp_name = "endp{}".format(Application.endp_count)
         Application.endp_count += 1
@@ -71,7 +74,8 @@ class Application(object):
             body_names,
             json_names,
             json,
-            response_type
+            response_type,
+            cors
         )
 
         self.endpoints[endp_name] = func
@@ -84,16 +88,35 @@ class Application(object):
     def dispatch_request(self, request):
         adapter = self.urls.bind_to_environ(request.environ)
         try:
+            headers = {}
+            headers["Access-Control-Allow-Origin"] = "*"
+            headers["Access-Control-Allow-Headers"] = "Content-Type, Accept, X-Auth-Token, asd"
+
             endpoint, values = adapter.match()
 
             if not request.method in self.methods[endpoint]:
-                raise E.MethodNotAllowed()
+                
+                if not cors_is_valid(request, self.methods):
+                    raise E.MethodNotAllowed()
+                else:
+                    resp = self.endpoints[endpoint](request, *(), **values)
+
+                    resp.headers = headers
+                    return resp
+
 
             args = ()
 
-            return self.endpoints[endpoint](request, *args, **values)
+            resp = self.endpoints[endpoint](request, *args, **values)
+            resp.headers = headers
+            return resp
         except E.HTTPException as e:
-            return e
+            return Response(
+                status=e.code,
+                response=e.get_body(),
+                mimetype="application/xml",
+                content_type="application/xml"
+            )
 
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)
