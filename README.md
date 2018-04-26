@@ -10,9 +10,13 @@ Documented at: http://gofri.readthedocs.io
 ---
 **NEXT VERSION: 2.0.0**
 
-1. Extensibility (custom modules, automatic modules)
-1. JWT module
+1. Extension handling &#10004;
+1. JWT extension
 1. New config possibilities
+1. CORS support &#10004;
+1. Local config encryption
+1. Template projects for getting started
+1. Virtualenv support
 ---
 *&#10004; : available in developer version(this repo).
 
