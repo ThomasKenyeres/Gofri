@@ -20,7 +20,7 @@ class HttpWrapper:
         pass
 
     def wrap_function(self, func, is_get, request_name, param_names,
-                      header_names, body_pnames, json_names, json, response_type, cors):
+                      header_names, body_pnames, json_names, json, response_type):
         def wrapper_func(*args, **kwargs):
             request = args[0]
 
