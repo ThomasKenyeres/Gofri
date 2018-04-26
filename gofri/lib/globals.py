@@ -26,8 +26,9 @@ def init_conf(root_path):
     conf.EXTENSIONS = C.get_dict_config(conf.CONF, "extensions")
     conf.EXT_CONF_ENABLE_AUTORUN = C.get_dict_config(conf.CONF, "extension-conf", "enable-autorun") == "True"
     conf.EXT_CONF_ENABLE_CIO = C.get_dict_config(conf.CONF, "extension-conf", "enable-auto-config") == "True"
+    conf.AUTO_INSTALL = False
 
-    if isinstance(conf.DEPENDENCIES, str):
+    if not isinstance(conf.DEPENDENCIES, list):
         conf.DEPENDENCIES = [conf.DEPENDENCIES]
 
     if isinstance(conf.EXTENSIONS, str):
