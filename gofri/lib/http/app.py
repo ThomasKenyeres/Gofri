@@ -101,8 +101,12 @@ class Application(object):
             resp = self.endpoints[endpoint](request, *(), **values)
 
             if cors_enabled:
-                resp.headers["Access-Control-Allow-Origin"] = "*"
-                resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Accept, X-Auth-Token, asd"
+                origin_present = "Access-Control-Allow-Origin" in resp.headers
+                headers_present = "Access-Control-Allow-Headers" in resp.headers
+                if not origin_present:
+                    resp.headers["Access-Control-Allow-Origin"] = "*"
+                if not headers_present:
+                    resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Accept"
 
             return resp
         except E.HTTPException as e:
