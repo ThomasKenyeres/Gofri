@@ -31,7 +31,7 @@ class POST(PostBasedRequestHandler):
 
 class HEAD(PostBasedRequestHandler):
     def _set_methods(self):
-        return [RequestMethod.POST]
+        return [RequestMethod.HEAD]
 
 
 class PUT(PostBasedRequestHandler):
