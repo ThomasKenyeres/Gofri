@@ -4,7 +4,7 @@ from gofri.developer.conf import LocalConfigIO
 from gofri.lib.globals import Config
 
 
-def init_custom_conf_file(root_path):
+def init_local_conf_file(root_path):
     if not os.path.exists(root_path + "/local.ini"):
         with open(root_path + "/local.ini", "w") as cfile:
             cfile.close()
