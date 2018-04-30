@@ -1,5 +1,9 @@
-from clinodes.nodes import ArgNode
 
+import os
+
+from clinodes.nodes import ArgNode, Switch
+
+from gofri.lib.project_generator.generator import generate_project
 from gofri.lib.project_generator.module_generator import generate_module
 from gofri.lib.project_generator.templates import build_entity_file, build_filter_file
 
@@ -111,9 +115,62 @@ class GenerateNode(ArgNode):
         }
         self.expects_more = True
 
+
+class EncryptNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+        pass
+
+    def run(self, *args_remained):
+        if len(args_remained) > 0:
+            encryptable = args_remained[0]
+            if encryptable == "local-config":
+                print("Encrypting lc")
+                print("Unimplemented")
+            else:
+                print("Invalid option: '{}'".format(encryptable))
+        else:
+            print("Please specify what to encrypt")
+
+
+class VenvSwitch(Switch):
+    pass
+
+
+class NewProjectNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+
+    def run(self, *args_remained):
+        name = args_remained[0]
+        if len(args_remained) == 1:
+            print("Generating project...")
+            generate_project(os.getcwd(), name)
+        elif len(args_remained) == 2:
+            generate_project(os.getcwd(), name, use_venv=True)
+        else:
+            print("Invalid option!")
+
+
+
+class StartNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+
+    def run(self, *args_remained):
+        __name__ = "__main__"
+        fullpath = "{}/start.py".format(os.getcwd())
+        os.system("python3 {}".format(fullpath))
+
+
+
 class RootNode(ArgNode):
     def setup(self):
+        print("ROOT: {}".format(os.getcwd()))
         self.commands = {
             "generate": GenerateNode,
+            "encrypt": EncryptNode,
+            "new": NewProjectNode,
+            "start": StartNode
         }
         self.expects_more = True
