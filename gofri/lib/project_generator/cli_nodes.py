@@ -166,7 +166,6 @@ class StartNode(ArgNode):
 
 class RootNode(ArgNode):
     def setup(self):
-        print("ROOT: {}".format(os.getcwd()))
         self.commands = {
             "generate": GenerateNode,
             "encrypt": EncryptNode,
