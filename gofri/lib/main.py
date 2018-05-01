@@ -60,13 +60,6 @@ def run():
     APP.run(port=int(conf.PORT), host=conf.HOST)
 
 def start(root_path, modules, autoconf=False, auto_install=False):
-    banner = "GOFRI -- version: {}\n{}\n".format(
-        pkg_resources.get_distribution("gofri").version,
-        "#" * shutil.get_terminal_size().columns
-    )
-    print(banner)
-
-
     GLOB.init_conf(root_path)
     piphandler = PIPHandler()
     piphandler.packages = GLOB.Config().DEPENDENCIES
