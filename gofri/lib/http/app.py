@@ -1,5 +1,7 @@
 import os
 
+import pkg_resources
+import shutil
 import werkzeug.exceptions as E
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.routing import Map, Rule
@@ -10,6 +12,13 @@ from gofri.lib.http.control import HttpWrapper
 from gofri.lib.http.cors import cors_is_valid
 from gofri.lib.http.wrappers import Response, Request
 
+
+
+
+standard_banner = "GOFRI -- version: {}\n{}\n".format(
+        pkg_resources.get_distribution("gofri").version,
+        "#" * shutil.get_terminal_size().columns
+    )
 
 class Application(object):
     endp_count = 0
@@ -27,6 +36,14 @@ class Application(object):
         self.cors_endpoints = []
         self.wrapper = HttpWrapper()
         self._setup_wsgi(enable_static=True, static_dir=static_conf["dir"], static_path=static_conf["path"])
+        if not "banner" in static_conf:
+            self.__banner = standard_banner
+        else:
+            self.__banner = static_conf["banner"]
+        self._show_banner()
+
+    def _show_banner(self):
+        print(self.__banner)
 
     def run(self, host="127.0.0.1", port=8080, use_reloader=False):
         run_simple(host, port, self, use_reloader=use_reloader)
