@@ -12,7 +12,7 @@ Documented at: http://gofri.readthedocs.io
 
 1. Extension handling &#10004;
 1. JWT extension
-1. New config possibilities
+1. New config possibilities &#10004;
 1. CORS support &#10004;
 1. Local config encryption
 1. Template projects for getting started
