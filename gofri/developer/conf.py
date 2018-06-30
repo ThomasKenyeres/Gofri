@@ -1,6 +1,7 @@
 import configparser
 
-from gofri.lib.globals import Config
+from gofri.lib.global_config import Configuration
+
 
 class SectionWrapper:
     def __init__(self, name, confdict):
@@ -12,7 +13,7 @@ class LocalConfigIO(object):
         if fullpath is not None:
             self.__local_conf_path = fullpath
         else:
-            self.__local_conf_path = "{}/{}".format(Config().ROOT_PATH, filename)
+            self.__local_conf_path = "{}/{}".format(Configuration.ROOT_PATH, filename)
         self.__config = configparser.ConfigParser()
         self.update()
 
