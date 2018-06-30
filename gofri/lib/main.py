@@ -12,13 +12,16 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, sessionmaker
 
-from gofri.developer.conf import LocalConfigIO
-from gofri.lib.conf.config_reader import XMLConfigReader
-from gofri.lib.conf.local import init_local_conf_file, load_default_config
-from gofri.lib.global_config import Configuration
 from gofri.lib.http.app import Application
 from gofri.lib.pip.pip_handler import PIPHandler
 
+try:
+    from gofri.lib.global_config import Configuration
+    from gofri.lib.conf.local import init_local_conf_file, load_default_config
+    os.environ["GOFRI_HAS_ROOT"] = "True"
+except KeyError:
+    print("No root package detected! Running in standalone mode")
+    os.environ["GOFRI_HAS_ROOT"] = "False"
 
 def init_extension_config(filename):
     fullpath = "{}/{}".format(Configuration.ROOT_PATH, filename)
