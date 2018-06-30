@@ -21,6 +21,7 @@ def build_xml(root_package, name):
     """.format(name, root_package)
     return xml
 
+
 def build_filter_file(root_package_name, name):
     file_content = """from gofri.lib.decorate.http import GofriFilter
 from gofri.lib.http.filter import Filter
@@ -31,6 +32,7 @@ class {}(Filter):
         return self._continue(request, response)
 """.format(inflection.camelize(name))
     return file_content
+
 
 def build_entity_file(root_package_name, name, columns):
     name = inflection.camelize(name, uppercase_first_letter=True)
@@ -47,20 +49,26 @@ class {}(Base):
 """.format(name, name, entities)
     return file_content
 
+
 def build_start_file_content(root_package_name):
     start_file_content = """import importlib
 import os
 import sys
+
+ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+os.environ["GOFRI_ROOT_PATH"] = ROOT_PATH
+
 from gofri.lib.main import main
 
 sys.path.append(sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
     
 if __name__ == '__main__':
-    ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
     mod = importlib.__import__("{}")
     main(ROOT_PATH, mod)
+
 """.format(root_package_name)
     return start_file_content
+
 
 generator_file_content = """import os
 import sys
