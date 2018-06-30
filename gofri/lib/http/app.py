@@ -66,7 +66,6 @@ class Application(object):
             })
 
     def render_template(self, template_name, **kwargs):
-        kwargs.update(globals())
         return self.jinja_env.get_template(template_name).render(**kwargs)
 
     def set_url_endpoint(self, path, func, methods, request_nm="",
