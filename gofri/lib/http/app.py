@@ -45,8 +45,9 @@ class Application(object):
         print(self.__banner)
 
     def run(self, host="127.0.0.1", port=8080, use_reloader=False):
-        self.jinja_template_path = "{}/{}".format(os.environ["GOFRI_ROOT_PATH"], "templates")
-        self.jinja_env = self._setup_jinja()
+        if os.environ["GOFRI_HAS_ROOT"] == "True":
+            self.jinja_template_path = "{}/{}".format(os.environ["GOFRI_ROOT_PATH"], "templates")
+            self.jinja_env = self._setup_jinja()
 
         run_simple(host, port, self, use_reloader=use_reloader)
 
