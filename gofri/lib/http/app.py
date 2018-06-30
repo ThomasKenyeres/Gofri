@@ -1,8 +1,8 @@
 import os
-
 import pkg_resources
 import shutil
 import werkzeug.exceptions as E
+
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.routing import Map, Rule
 from werkzeug.serving import run_simple
@@ -13,8 +13,6 @@ from gofri.lib.http.cors import cors_is_valid
 from gofri.lib.http.wrappers import Response, Request
 
 
-
-
 standard_banner = "GOFRI -- version: {}\n{}\n".format(
         pkg_resources.get_distribution("gofri").version,
         "#" * shutil.get_terminal_size().columns
@@ -23,12 +21,13 @@ standard_banner = "GOFRI -- version: {}\n{}\n".format(
 class Application(object):
     endp_count = 0
 
-    def __init__(self, jinja_template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+    def __init__(self,
+                 jinja_template_path=None,
                  jinja_dir="templates",
-                 static_conf={ "enable": False, "dir": "/static", "path": ""}):
+                 static_conf={ "enable": False, "dir": "/static", "path": ""}
+                 ):
         self.jinja_template_path = jinja_template_path
         self.jinja_dir = jinja_dir
-        self.jinja_env = self._setup_jinja()
         self.urls = Map([])
         self.endpoints = {}
         self.methods = {}
@@ -46,6 +45,9 @@ class Application(object):
         print(self.__banner)
 
     def run(self, host="127.0.0.1", port=8080, use_reloader=False):
+        self.jinja_template_path = "{}/{}".format(os.environ["GOFRI_ROOT_PATH"], "templates")
+        self.jinja_env = self._setup_jinja()
+
         run_simple(host, port, self, use_reloader=use_reloader)
 
     def _setup_jinja(self):
@@ -64,7 +66,6 @@ class Application(object):
 
     def render_template(self, template_name, **kwargs):
         kwargs.update(globals())
-        print(globals())
         return self.jinja_env.get_template(template_name).render(**kwargs)
 
     def set_url_endpoint(self, path, func, methods, request_nm="",
