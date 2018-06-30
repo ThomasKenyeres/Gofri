@@ -60,7 +60,7 @@ os.environ["GOFRI_ROOT_PATH"] = ROOT_PATH
 
 from gofri.lib.main import main
 
-sys.path.append(sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
     
 if __name__ == '__main__':
     mod = importlib.__import__("{}")
