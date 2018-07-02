@@ -133,10 +133,6 @@ class EncryptNode(ArgNode):
             print("Please specify what to encrypt")
 
 
-class VenvSwitch(Switch):
-    pass
-
-
 class NewProjectNode(ArgNode):
     def setup(self):
         self.expects_more = False
@@ -147,7 +143,10 @@ class NewProjectNode(ArgNode):
             print("Generating project...")
             generate_project(os.getcwd(), name)
         elif len(args_remained) == 2:
-            generate_project(os.getcwd(), name, use_venv=True)
+            if args_remained[1] == "--venv":
+                generate_project(os.getcwd(), name, use_venv=True)
+            else:
+                print("Invalid option!")
         else:
             print("Invalid option!")
 
