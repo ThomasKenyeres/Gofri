@@ -151,17 +151,29 @@ class NewProjectNode(ArgNode):
         else:
             print("Invalid option!")
 
+USE_RELOADER = False
+
+class ReloaderSwitch(Switch):
+    def run(self, *args):
+        global USE_RELOADER
+        USE_RELOADER = True
 
 
 class StartNode(ArgNode):
     def setup(self):
         self.expects_more = False
+        self.switches = {
+            "--reload": ReloaderSwitch,
+            "--use-reloader": ReloaderSwitch
+        }
 
     def run(self, *args_remained):
         __name__ = "__main__"
         fullpath = "{}/start.py".format(os.getcwd())
-        os.system("python3 {}".format(fullpath))
-
+        if USE_RELOADER:
+            os.system("python3 {} --use-reloader".format(fullpath))
+        else:
+            os.system("python3 {}".format(fullpath))
 
 
 class RootNode(ArgNode):

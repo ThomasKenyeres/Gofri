@@ -56,13 +56,15 @@ def integrate_extensions(autoconf=False):
                     if ext["autoconf"] == "True":
                         load_default_config(root_path, name)
 
+USE_RELOADER = False
+
 def run():
     conf = Configuration
     if conf.HOST == None:
         conf.HOST = "127.0.0.1"
-    APP.run(port=int(conf.PORT), host=conf.HOST)
+    APP.run(port=int(conf.PORT), host=conf.HOST, use_reloader=USE_RELOADER)
 
-def start(root_path, modules, autoconf=False, auto_install=False):
+def start(root_path, modules, autoconf=False, auto_install=False,):
     piphandler = PIPHandler()
     piphandler.packages = Configuration.DEPENDENCIES
 
@@ -78,10 +80,14 @@ def start(root_path, modules, autoconf=False, auto_install=False):
 
     run()
 
-
 def main(root_path, modules):
     Configuration.AUTO_INSTALL = False
     do_autoconf = False
+
+    class ReloaderSwitch(Switch):
+        def run(self, *args):
+            global USE_RELOADER
+            USE_RELOADER = True
 
     class InstallerSwitch(Switch):
         def setup(self):
@@ -103,12 +109,13 @@ def main(root_path, modules):
             self.switches = {
                 "--enable-default": UpdaterSwitch,
                 "-ed": UpdaterSwitch,
-                "--install": InstallerSwitch
+                "--install": InstallerSwitch,
+                "--use-reloader": ReloaderSwitch
             }
 
         def run(self, *args_remained):
             do_auto_install = Configuration.AUTO_INSTALL
-            if len(args_remained) == 0:
-                start(root_path, modules, autoconf=do_autoconf, auto_install=do_auto_install)
+            start(root_path, modules, autoconf=do_autoconf, auto_install=do_auto_install)
+
 
     RootNode()
