@@ -1,6 +1,8 @@
 
 import os
+import shlex
 
+import sys
 from clinodes.nodes import ArgNode, Switch
 
 from gofri.lib.project_generator.generator import generate_project
@@ -170,9 +172,25 @@ class StartNode(ArgNode):
         __name__ = "__main__"
         fullpath = "{}/start.py".format(os.getcwd())
         if USE_RELOADER:
-            os.system("python3 {} --use-reloader".format(fullpath))
+            os.system("{} {} --use-reloader".format(sys.executable, shlex.quote(fullpath)))
         else:
-            os.system("python3 {}".format(fullpath))
+            os.system("{} {}".format(sys.executable, shlex.quote(fullpath)))
+
+
+class VenvActivatorNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+
+    def run(self, *args_remained):
+        print("Activate")
+
+
+class VenvDeactivatorNode(ArgNode):
+    def setup(self):
+        self.expects_more = False
+
+    def run(self, *args_remained):
+        print("Deactivate")
 
 
 class RootNode(ArgNode):
@@ -181,6 +199,8 @@ class RootNode(ArgNode):
             "generate": GenerateNode,
             "encrypt": EncryptNode,
             "new": NewProjectNode,
-            "start": StartNode
+            "start": StartNode,
+            "activate": VenvActivatorNode,
+            "deactivate": VenvDeactivatorNode
         }
         self.expects_more = True
