@@ -1,7 +1,8 @@
 from gofri.lib.main import APP
 
 class RequestHandler(object):
-    def __init__(self, path, request="", response_type="text/plain", headers="", params="", cors=False):
+    def __init__(self, path, request="", response_type="text/plain",
+                 headers="", params="", cors=False):
         self.path = path
         self.headers = headers
         self.params= params
