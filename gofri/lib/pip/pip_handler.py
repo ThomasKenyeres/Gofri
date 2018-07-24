@@ -1,7 +1,7 @@
 import importlib
 import os
-
-import pip
+import shlex
+import sys
 
 
 def check_pname(name):
@@ -27,6 +27,7 @@ class PIPHandler():
 
     def install(self):
         for package in self.get_uninstalled_packages():
+            INSTALL_STR = "{} -m pip install".format(sys.executable)
             package_name = package["name"]
             install_scope = package["install"]
             version = package["version"]
@@ -36,11 +37,23 @@ class PIPHandler():
                 print("Installing missing dependency: \"{}\" ...".format(package_name))
                 if install_scope == "user":
                     if version is not None:
-                        os.system("pip install {}=={} --user".format(package_name, version))
+                        os.system("{} {}=={} --user".format(
+                            INSTALL_STR,
+                            shlex.quote(package_name),
+                            shlex.quote(version)))
                     else:
-                        os.system("pip install {} --user".format(package_name))
+                        os.system("{} {} --user".format(
+                            INSTALL_STR,
+                            shlex.quote(package_name)
+                        ))
                 if install_scope == "system":
                     if version is not None:
-                        os.system("sudo -S pip install {}=={}".format(package_name, version))
+                        os.system("sudo -S {} {}=={}".format(
+                            INSTALL_STR,
+                            shlex.quote(package_name),
+                            shlex.quote(version)))
                     else:
-                        os.system("sudo -S pip install " + package_name)
+                        os.system("sudo -S {} {}".format(
+                            INSTALL_STR,
+                            shlex.quote(package_name)
+                        ))
