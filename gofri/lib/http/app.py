@@ -130,8 +130,8 @@ class Application(object):
             return Response(
                 status=e.code,
                 response=e.get_body(),
-                mimetype="application/xml",
-                content_type="application/xml"
+                mimetype="text/html",
+                content_type="text/html"
             )
 
     def __call__(self, environ, start_response):
