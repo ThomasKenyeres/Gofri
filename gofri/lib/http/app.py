@@ -1,6 +1,5 @@
 import os
 import pkg_resources
-import shutil
 import werkzeug.exceptions as E
 
 from jinja2 import Environment, FileSystemLoader
@@ -11,12 +10,9 @@ from werkzeug.wsgi import SharedDataMiddleware
 from gofri.lib.http.control import HttpWrapper
 from gofri.lib.http.cors import cors_is_valid
 from gofri.lib.http.wrappers import Response, Request
+from gofri.lib.util.art import generate_start_banner
 
-
-standard_banner = "GOFRI -- version: {}\n{}\n".format(
-        pkg_resources.get_distribution("gofri").version,
-        "#" * shutil.get_terminal_size().columns
-    )
+standard_banner = generate_start_banner(pkg_resources.get_distribution("gofri").version)
 
 class Application(object):
     endp_count = 0
