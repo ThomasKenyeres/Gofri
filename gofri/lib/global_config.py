@@ -1,6 +1,6 @@
 import os
 
-from gofri.lib.conf.config_file_analyzer import ConfigFileAnalyzer
+from gofri.lib.conf.config_reader import XMLConfigReader
 
 
 def _getc(key):
@@ -32,21 +32,21 @@ def force_dict(obj):
         return [obj]
 
 _root_path = _getc("GOFRI_ROOT_PATH")
-C = ConfigFileAnalyzer(_root_path)
-_conf = C.read()
+C = XMLConfigReader(_root_path)
+_conf = C.get_conf_xml()["configuration"]
 
 class Configuration():
     ROOT_PATH = _root_path
     CONF = _conf
-    HOST = C.get_config("hosting", "host")
-    PORT = C.get_config("hosting", "port")
-    DATABASE_RDBMS = C.get_config("database", "rdbms")
-    MYSQL_CONFIG = C.get_config("database", "mysql-config")
-    EXT_CONF_ENABLE_AUTORUN = C.get_config("extension-conf", "enable-autorun") == "True"
-    EXT_CONF_ENABLE_CIO = C.get_config("extension-conf", "enable-auto-config") == "True"
+    HOST = C.get_dict_config(_conf, "hosting", "host")
+    PORT = C.get_dict_config(_conf, "hosting", "port")
+    DATABASE_RDBMS = C.get_dict_config(_conf, "database", "rdbms")
+    MYSQL_CONFIG = C.get_dict_config(_conf, "database", "mysql-config")
+    EXT_CONF_ENABLE_AUTORUN = C.get_dict_config(_conf, "extension-conf", "enable-autorun") == "True"
+    EXT_CONF_ENABLE_CIO = C.get_dict_config(_conf, "extension-conf", "enable-auto-config") == "True"
 
-    DEPENDENCIES = force_non_empty_list(C.get_config("dependencies", "dependency"))
-    EXTENSIONS = force_non_empty_list(C.get_config("extensions"))
+    DEPENDENCIES = force_non_empty_list(C.get_dict_config(_conf, "dependencies", "dependency"))
+    EXTENSIONS = force_non_empty_list(C.get_dict_config(_conf, "extensions"))
 
     AUTO_INSTALL = False
 

@@ -1,5 +1,4 @@
-from gofri.lib.main import ApplicationWrapper
-
+from gofri.lib.main import APP
 
 class RequestHandler(object):
     def __init__(self, path, request="", response_type="text/plain",
@@ -10,10 +9,9 @@ class RequestHandler(object):
         self.request = request
         self.response_type = response_type
         self.cors = cors
-        self.app_wrapper = ApplicationWrapper()
 
     def __call__(self, func):
-        self.app_wrapper.http_app.set_url_endpoint(
+        APP.set_url_endpoint(
             self.path, func, ["GET"],
             request_nm=self.request,
             params_nm=self.params,
@@ -34,7 +32,7 @@ class PostBasedRequestHandler(RequestHandler):
         self.__methods = self._set_methods()
 
     def __call__(self, func):
-        return  self.app_wrapper.http_app.set_url_endpoint(
+        return APP.set_url_endpoint(
             self.path, func, self.__methods,
             request_nm=self.request,
             params_nm=self.params,

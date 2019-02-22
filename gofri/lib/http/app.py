@@ -20,10 +20,6 @@ standard_banner = "GOFRI -- version: {}\n{}\n".format(
 
 class Application(object):
     endp_count = 0
-    URLS = Map([])
-    STARTED = False
-    ENDPOINTS = {}
-    METHODS = {}
 
     def __init__(self,
                  jinja_template_path=None,
@@ -32,6 +28,9 @@ class Application(object):
                  ):
         self.jinja_template_path = jinja_template_path
         self.jinja_dir = jinja_dir
+        self.urls = Map([])
+        self.endpoints = {}
+        self.methods = {}
         self.calldata = {}
         self.cors_endpoints = []
         self.wrapper = HttpWrapper()
@@ -40,9 +39,7 @@ class Application(object):
             self.__banner = standard_banner
         else:
             self.__banner = static_conf["banner"]
-        if not Application.STARTED:
-            self._show_banner()
-            Application.STARTED = True
+        self._show_banner()
 
     def _show_banner(self):
         print(self.__banner)
@@ -77,7 +74,7 @@ class Application(object):
 
         endp_name = "endp{}".format(Application.endp_count)
         Application.endp_count += 1
-        Application.URLS.add(Rule(path, endpoint=endp_name))
+        self.urls.add(Rule(path, endpoint=endp_name))
 
         param_names = [p.strip() for p in params_nm.split(";") if p.strip() != ""]
         header_names = [h.strip() for h in headers_nm.split(";") if h.strip() != ""]
@@ -97,10 +94,8 @@ class Application(object):
             response_type
         )
 
-
-        Application.ENDPOINTS[endp_name] = func
-
-        Application.METHODS[endp_name] = methods
+        self.endpoints[endp_name] = func
+        self.methods[endp_name] = methods
 
         if cors:
             self.cors_endpoints.append(endp_name)
@@ -110,17 +105,17 @@ class Application(object):
         return Response(template.render(context), mimetype="text/html", content_type="text/html")
 
     def dispatch_request(self, request):
-
-        adapter = Application.URLS.bind_to_environ(request.environ)
+        adapter = self.urls.bind_to_environ(request.environ)
         try:
             endpoint, values = adapter.match()
             cors_enabled = endpoint in self.cors_endpoints
-            if not request.method in Application.METHODS[endpoint]:
-                if not cors_is_valid(request, Application.METHODS):
+            if not request.method in self.methods[endpoint]:
+
+                if not cors_is_valid(request, self.methods):
                     raise E.MethodNotAllowed()
 
 
-            resp = Application.ENDPOINTS[endpoint](request, *(), **values)
+            resp = self.endpoints[endpoint](request, *(), **values)
 
             if cors_enabled:
                 origin_present = "Access-Control-Allow-Origin" in resp.headers
@@ -135,8 +130,8 @@ class Application(object):
             return Response(
                 status=e.code,
                 response=e.get_body(),
-                mimetype="text/html",
-                content_type="text/html"
+                mimetype="application/xml",
+                content_type="application/xml"
             )
 
     def __call__(self, environ, start_response):
