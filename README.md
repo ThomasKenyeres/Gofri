@@ -14,10 +14,10 @@ Documented at: http://gofri.readthedocs.io
 1. JWT extension
 1. New config possibilities &#10004;
 1. CORS support &#10004;
+1. Local config encryption
 1. Template projects for getting started
 1. Virtualenv support
-1. Standalone mode (no need to create project) &#10004;
-1. Portal engine 
+1. Standalone mode (no need to create project) &#10004; 
 ---
 *&#10004; : available in developer version(this repo).
 

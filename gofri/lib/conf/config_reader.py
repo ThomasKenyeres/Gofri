@@ -13,3 +13,14 @@ class XMLConfigReader:
             conf_xml_path = self.conf_xml_path
         xmlparser = XMLParser()
         return xmlparser.file_to_dict(conf_xml_path)
+
+    def get_dict_config(self, d, *keys):
+        result = dict(d)
+        for key in keys:
+            try:
+                if result[key] is None:
+                    return None
+            except KeyError:
+                return None
+            result = result[key]
+        return result
