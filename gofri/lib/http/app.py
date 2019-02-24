@@ -73,7 +73,6 @@ class Application(object):
 
         endp_name = "endp{}".format(Application.endp_count)
         Application.endp_count += 1
-        Application.URLS.add(Rule(path, endpoint=endp_name))
 
         param_names = [p.strip() for p in params_nm.split(";") if p.strip() != ""]
         header_names = [h.strip() for h in headers_nm.split(";") if h.strip() != ""]
@@ -93,10 +92,24 @@ class Application(object):
             response_type
         )
 
+        has_rule = False
+        rule = None
+        for r in Application.URLS.iter_rules():
+            if path == r.rule:
+                has_rule = True
+                rule = r
 
-        Application.ENDPOINTS[endp_name] = func
+        if has_rule:
+            Application.METHODS[rule.endpoint] += methods
+            for method in methods:
+                Application.ENDPOINTS[rule.endpoint][method] = func
+        else:
+            Application.METHODS[endp_name] = methods
+            Application.ENDPOINTS[endp_name] = {}
+            for method in methods:
+                Application.ENDPOINTS[endp_name][method] = func
 
-        Application.METHODS[endp_name] = methods
+        Application.URLS.add(Rule(path, endpoint=endp_name))
 
         if cors:
             self.cors_endpoints.append(endp_name)
@@ -115,8 +128,7 @@ class Application(object):
                 if not cors_is_valid(request, Application.METHODS):
                     raise E.MethodNotAllowed()
 
-
-            resp = Application.ENDPOINTS[endpoint](request, *(), **values)
+            resp = Application.ENDPOINTS[endpoint][request.method](request, *(), **values)
 
             if cors_enabled:
                 origin_present = "Access-Control-Allow-Origin" in resp.headers
